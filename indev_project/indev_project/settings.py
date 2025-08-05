@@ -32,19 +32,12 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # my app
-    "user",
     "customer",
     "owner",
-    "shop",
-    "review",
     "category",
-    "analysis",
-    "reservation",
-    "stamp",
-    "mission",
-    "myMissions",
-    "reward",
-    "rewardClaim",
+    "post",
+    "store",
+    "missions",
     # Basic App
     "django.contrib.admin",
     "django.contrib.auth",

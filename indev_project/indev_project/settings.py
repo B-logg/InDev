@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "post",
     "store",
     "missions",
+    "route",
     # Basic App
     "django.contrib.admin",
     "django.contrib.auth",

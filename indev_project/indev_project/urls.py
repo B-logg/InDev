@@ -22,5 +22,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("route/", include("route.urls")),
     path("post/", include("post.urls")),
+    path("cutomer/", include("customer.urls")),
+    
     # 더 추가해야됨
 ]

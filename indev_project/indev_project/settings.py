@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent # 현재 settings.py 파일 위치를 기준으로 프로젝트 최상위 폴더 경로를 Path 객체로 잡음, 예: .../indev_project/settings.py이면, BASE_DIR = .../indev_project
+MEDIA_URL = '/media/' # 사용자가 업로드한 파일(이미지)을 브라우저에서 접근할때 쓰는 URL 접두사, 예: 업로드된 파일이 MEDIA_ROOT/flyers.png이면, URL은 /media/flyers.png
+MEDIA_ROOT = BASE_DIR / 'media' # 업로드된 파일이 실제로 저장될 서버 디스크 경로, 예: .../indev_project/media
+STATIC_URL = '/static/' # 정적 파일(CSS, JS, 이미지 등)을 제공할 때 쓰는 URL 접두사
+STATIC_ROOT = BASE_DIR / 'staticfiles' # collectstatic 명령으로 모든 정적 파일을 한 폴더에 모을 배포용 최종 경로
+# 예: 'python manage.py collectstatic 실행 시 결과물이 .../indev_project/staticfiles 로 복사된다. 
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +33,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+"""
+Nginx와 같은 프록시에도 이 헤더를 꼭 넘겨줘야함. 
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Forwarded-Host  $host;
+proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+"""
+
 
 # Application definition
 
@@ -39,8 +54,10 @@ INSTALLED_APPS = [
     "store",
     "missions",
     "route",
+    
     # Basic App
     "rest_framework",
+    'flyers',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

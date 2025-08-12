@@ -66,6 +66,7 @@ class GenerateFlyerView(APIView):
             )
 
         # services.py에서 입력 값 검증에 실패하면 ValueError를 던지도록 했다면 400으로 내려줌
+        # 또는 NSFW 플래그 검사를 통한 안전 필터(세이프티 체크)에 걸러진 것.(노출/음란/민감 등의 이미지 반환 막기)
         except ValueError as e:
             return Response({"ok": False, "error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

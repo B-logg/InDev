@@ -13,7 +13,7 @@ _device = (
     else ("mps" if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available()
           else "cpu")
 )
-_dtype = torch.float16 if _device in ("cuda", "mps") else torch.float32
+_dtype = torch.float16 if _device in "cuda" else torch.float32
 
 _MODEL_ID = "runwayml/stable-diffusion-v1-5"
 

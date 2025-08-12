@@ -10,7 +10,6 @@ ENV/
 media/
 **/migrations/__pycache__/
 /migrations/*.pyc
-*/migrations/*.py 
 .vscode/
 .env
 *.env

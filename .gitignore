@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 *.sqlite3
+*.sqlite3-journal
 *.pyc
 venv/
 env/
@@ -20,3 +21,4 @@ pip-log.txt
 htmlcov/
 .pytest_cache/
 myenv/
+indev_project/media/

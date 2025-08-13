@@ -8,7 +8,7 @@ from .serializers import StoreSerializer, AnalysisSerializer
 class StoreView(APIView):
     def get(self, request, pk=None):
         if pk:
-            store = Store.objects.get(pk=pk)
+            store = get_object_or_404(Store, pk=pk)
             serializer = StoreSerializer(store)
             return Response(serializer.data)
         stores = Store.objects.all().values("store_id", "name", "address", "category", "category__name")

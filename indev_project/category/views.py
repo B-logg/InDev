@@ -8,7 +8,7 @@ from .serializers import CategorySerializer
 class CategoryView(APIView):
     def get(self, request, pk=None):
         if pk:
-            category = Category.objects.get(pk=pk)
+            category = get_object_or_404(Category, pk=pk)
             serializer = CategorySerializer(category)
             return Response(serializer.data)
         categories = Category.objects.all().values("category_id", "name")

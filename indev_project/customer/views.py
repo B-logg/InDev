@@ -43,7 +43,7 @@ class CustomerView(APIView):
 class CharacterView(APIView):
     def get(self, request, pk=None):
         if pk:
-            character = Character.objects.get(pk=pk)
+            character = get_object_or_404(Character, pk=pk)
             serializer = CharacterSerializer(character)
             return Response(serializer.data)
         characters = Character.objects.all().values("character_id", "name", "image")

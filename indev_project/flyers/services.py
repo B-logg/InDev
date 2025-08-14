@@ -21,19 +21,20 @@ _MODEL_ID = "runwayml/stable-diffusion-v1-5"
 # 전단지 조건: 1. 하나의 전단지만이 들어와있어야함. 2. 손가락, 물건 등등 불필요한 요소 제거
 # 긍정 프롬프트 힌트(단일 전단지, 중앙배치, 정면, 무배경, 여백, 이외 모형 금지)
 _COMPOSITION_HINT = (
-    "single centered poster on a plain white background,"
-    " one main subject only, flat vector poster, minimal modern graphic design,"
-    " clean margins, copy space, high contrast, front view"
+    ", single centered poster, plain white background, one subject, front view,"
+    " clean margins, copy space, flat vector poster, minimal design, high contrast"
 )
 
 # 부정 프롬프트(중복, 모형, 사람, 손, 프레임, 콜라주, 텍스트 잡음 ... 제거)
 _BASE_NEG = (
     "pattern, repeating, seamless, tiled, collage, grid, multiple, duplicates,"
-    " mockup, poster mockup, magazine mockup, billboard, wall, desk, table, scene,"
-    " person, people, hand, fingers,"
-    " photo, photorealistic, food photograph, flat lay, top-down,"
-    " text, extra text, random letters, watermark, logo,"
-    " low quality, blurry, jpeg artifacts, noise, grainy"
+    " mockup, poster mockup, magazine, open book, brochure, leaflet, fold, crease, curled, bent,"
+    " perspective, isometric, wall, billboard, desk, table, scene, room, environment,"
+    " photo, photographic, photorealistic, flat lay, top-down, camera, lens, bokeh,"
+    " background texture, paper texture, gradient background, vignette, shadow on background,"
+    " text, letters, random letters, lorem ipsum, watermark, logo, caption, QR code, barcode,"
+    " person, people, hand, fingers, extra fingers, extra limbs,"
+    " low quality, blurry, noise, jpeg artifacts"
 )
 
 

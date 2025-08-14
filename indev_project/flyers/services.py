@@ -21,19 +21,30 @@ _MODEL_ID = "runwayml/stable-diffusion-v1-5"
 # 전단지 조건: 1. 하나의 전단지만이 들어와있어야함. 2. 손가락, 물건 등등 불필요한 요소 제거
 # 긍정 프롬프트 힌트(단일 전단지, 중앙배치, 정면, 무배경, 여백, 이외 모형 금지)
 _COMPOSITION_HINT = (
-    ", single centered poster, single flyer, isolated on plain, solid white background, front view,"
-    " clean margin, no perspective, minimal layout, professional graphic design" 
+    ", single centered poster, single flyer, isolated on plain, solid-color background, front view,"
+    " clean margin, no perspective, minimal layout, professional graphic design,"
+    " pure white background, studio background, A4 portrait aspect ratio,"
+    " fromt view, flat scan, generous clean margins, Swiss grid layout,"
+    " minimal modern graphic design, vector graphic style, bold typegraphy, high contrast,"
+    " sharp edges, clean lines, even studio lighting, high resolution, 4k render,"
+    " no gradients, no texture"
 )
 
 # 부정 프롬프트(중복, 모형, 사람, 손, 프레임, 콜라주, 텍스트 잡음 ... 제거)
 _BASE_NEG = (
-    "duplicate, duplicates, multiple, two, three, collage, grid, framed, border,"
-    " mockup, perspective mockup, billboard, wall, desk, table,"
-    " hand, hands, finger, fingers, person, people, human, body, selfie,"
-    " watermark, logo, signature, caption,"
-    " extra text, text artifacts, bad typography, distorted text,"
-    " low quality, blurry, jpeg artifacts"
+    "duplicate, duplicates, multiple, two, three, collage, grid, multi-panel, diptych, triptych,"
+    " frame, border, margin frame,"
+    " mockup, perspective mockup, magazine mockup, poster mockup, billboard, wall, floor,"
+    " desk, table, scene, environment, room, furniture,"
+    " background texture, paper texture, gradient background, vignette, spotlight,"
+    " shadow on background, heavy shadow, drop shadow,"
+    " fold, crease, wrinkles, torn paper, curled edges, bent corners, print artifacts, moire,"
+    " noise, grainy, low quality, blurry, jpeg artifacts,"
+    " watermark, logo, signature, caption, QR code, barcode,"
+    " random letters, lorem ipsum, garbled text, misspelled, distorted text, bad typography,"
+    " person, people, human, body, arm, hand, hands, finger, fingers, extra fingers, extra limbs"
 )
+
 
 
 

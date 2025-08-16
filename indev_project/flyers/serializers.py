@@ -14,6 +14,7 @@ class GenerateFlyerSerializer(serializers.Serializer):
     steps = serializers.IntegerField(required=False, default=30, min_value=5, max_value=75)
     guidance_scale = serializers.FloatField(required=False, default=7.5, min_value=0.0, max_value=20.0)
     seed = serializers.IntegerField(required=False)
+    auto_translate = serializers.BooleanField(required=False, default=True)
 
     # (필수)prompt: 무엇을 만들지에 대한 긍정 프롬프트. 이미지의 주제, 스타일, 색감, 구도 등을 자연어로 제시
     # (선택)negative_prompt: 피하고 싶은 요소를 적는 프롬프트. 품질을 해치는 요소를 배제.

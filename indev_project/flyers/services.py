@@ -6,6 +6,7 @@ from pathlib import Path
 import torch
 from diffusers import StableDiffusionPipeline
 from django.conf import settings
+from .translate import ko_to_en, contains_korean
 
 # 디바이스/DTYPE: CUDA > MPS(MAC의 경우에만 해당함) > CPU
 _device = (
@@ -17,7 +18,26 @@ _dtype = torch.float16 if _device in "cuda" else torch.float32
 
 _MODEL_ID = "runwayml/stable-diffusion-v1-5"
 
-# 파이프라인 (1회 로드)
+# 전단지 조건: 1. 하나의 전단지만이 들어와있어야함. 2. 손가락, 물건 등등 불필요한 요소 제거
+# 긍정 프롬프트 힌트(단일 전단지, 중앙배치, 정면, 무배경, 여백, 이외 모형 금지)
+_COMPOSITION_HINT = (
+    "single centered poster on a plain white background,"
+    " one main subject only, flat vector poster, minimal modern graphic design,"
+    " clean margins, copy space, high contrast, front view"
+)
+
+# 부정 프롬프트(중복, 모형, 사람, 손, 프레임, 콜라주, 텍스트 잡음 ... 제거)
+_BASE_NEG = (
+    "pattern, repeating, seamless, tiled, collage, grid, multiple, duplicates,"
+    " mockup, poster mockup, magazine mockup, billboard, wall, desk, table, scene,"
+    " person, people, hand, fingers,"
+    " photo, photorealistic, food photograph, flat lay, top-down,"
+    " text, extra text, random letters, watermark, logo,"
+    " low quality, blurry, jpeg artifacts, noise, grainy"
+)
+
+
+# 파이프라인 (최초 1회만 로드됨)
 pipe: StableDiffusionPipeline | None = None
 def _init_pipe() -> StableDiffusionPipeline:
     global pipe
@@ -72,6 +92,7 @@ def generate_flyer_image(
     steps: int = 30,
     guidance_scale: float = 7.5,
     seed: int | None = None,
+    auto_translate: bool = True,
 ) -> str:
     """
     이미지를 생성하고 MEDIA_ROOT/flyers/에 저장한 뒤 'flyers/파일명'을 반환.
@@ -81,20 +102,32 @@ def generate_flyer_image(
     # 입력 정규화
     width, height, steps, guidance_scale = _normalize(width, height, steps, guidance_scale)
 
+    # 한국어 -> 영어 번역
+    if auto_translate and contains_korean(prompt):
+        prompt_en = ko_to_en(prompt)
+    else:
+        prompt_en = prompt
+
+    if auto_translate and negative_prompt and contains_korean(negative_prompt):
+        user_neg = ko_to_en(negative_prompt)
+    else:
+        user_neg = negative_prompt
+
+    # 기본 설정 프롬프트 + 입력 프롬프트 합치기
+    full_prompt = f"{prompt_en}{_COMPOSITION_HINT}"
+    merged_negative = ", ".join([_BASE_NEG] + ([user_neg] if user_neg else []))
+
     # 시드 고정
     if seed is None:
         seed = random.randint(0, 2**31 - 1)
     gen_device = "cuda" if _device == "cuda" else "cpu"  # MPS 제너레이터 이슈 회피
     generator = torch.Generator(device=gen_device).manual_seed(seed)
 
-    # 전단지 힌트 프롬프트
-    flyer_hint = ", clean layout, poster, flyer, bold typography, high contrast, graphic design, vector elements"
-    full_prompt = f"{prompt}{flyer_hint}"
 
     with torch.inference_mode():
         img = p(
             prompt=full_prompt,
-            negative_prompt=negative_prompt,
+            negative_prompt=merged_negative,
             width=width,
             height=height,
             num_inference_steps=steps,

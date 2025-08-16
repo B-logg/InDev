@@ -23,6 +23,7 @@ PyYAML==6.0.2
 regex==2025.7.34
 requests==2.32.4
 safetensors==0.6.2
+sentencepiece==0.2.1
 setuptools==80.9.0
 sqlparse==0.5.3
 sympy==1.14.0
@@ -32,6 +33,7 @@ transformers==4.55.0
 typing_extensions==4.14.1
 urllib3==2.5.0
 zipp==3.23.0
+sacremoses>=0.1.1
 
 # 전단지 생성 모델을 사용하기 위해 필요한 PyTorch는 운영체제 별로 설치 방법이 달라 따로 뺄게요.
 # (MacOS) python3 -m pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0

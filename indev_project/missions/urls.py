@@ -16,5 +16,5 @@ urlpatterns = [
     path("owner-missions/<int:pk>", OwnerMissionDetailView.as_view(), name="owner-mission-detail"),
 
     # 미션 배정
-    path("customer/<int:pk>/missions/assign", AssignMissionsView.as_view(), name="assign-missions"),
+    path("customer/<int:pk>", AssignMissionsView.as_view(), name="assign-missions"),
 ]

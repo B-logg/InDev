@@ -36,14 +36,7 @@ ALLOWED_HOSTS = [
     'indev-project.p-e.kr',
 ]
 
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-"""
-Nginx와 같은 프록시에도 이 헤더를 꼭 넘겨줘야함. 
-proxy_set_header X-Forwarded-Proto $scheme;
-proxy_set_header X-Forwarded-Host  $host;
-proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-"""
+
 
 
 # Application definition

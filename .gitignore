@@ -21,4 +21,4 @@ pip-log.txt
 htmlcov/
 .pytest_cache/
 myenv/
-indev_project/media/
+

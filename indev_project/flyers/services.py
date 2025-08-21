@@ -21,21 +21,16 @@ _MODEL_ID = "runwayml/stable-diffusion-v1-5"
 # 전단지 조건: 1. 하나의 전단지만이 들어와있어야함. 2. 손가락, 물건 등등 불필요한 요소 제거
 # 긍정 프롬프트 힌트(단일 전단지, 중앙배치, 정면, 무배경, 여백, 이외 모형 금지)
 _COMPOSITION_HINT = (
-    ", single centered poster, plain white background, one subject, front view,"
-    " clean margins, copy space, flat vector poster, minimal design, high contrast"
+  ", textless full-bleed A4 poster, pure white background, one large centered icon of the key product from the description (e.g., burger), straight-on not overhead, minimal flat vector, clear silhouette, high contrast, professional flyer, not a mockup, no collage, panels, scene, or props"
 )
+
 
 # 부정 프롬프트(중복, 모형, 사람, 손, 프레임, 콜라주, 텍스트 잡음 ... 제거)
 _BASE_NEG = (
-    "pattern, repeating, seamless, tiled, collage, grid, multiple, duplicates,"
-    " mockup, poster mockup, magazine, open book, brochure, leaflet, fold, crease, curled, bent,"
-    " perspective, isometric, wall, billboard, desk, table, scene, room, environment,"
-    " photo, photographic, photorealistic, flat lay, top-down, camera, lens, bokeh,"
-    " background texture, paper texture, gradient background, vignette, shadow on background,"
-    " text, letters, random letters, lorem ipsum, watermark, logo, caption, QR code, barcode,"
-    " person, people, hand, fingers, extra fingers, extra limbs,"
-    " low quality, blurry, noise, jpeg artifacts"
+  "TEXT, text, letters, words, numbers, logo, watermark, QR code, barcode, collage, panels, multi-page, mockup, frame, border, scene, room, props, overhead, flat lay, perspective, photo, photorealistic, texture, gradient, vignette, heavy shadow, people, hands, low quality, blurry, noise"
 )
+
+
 
 
 # 파이프라인 (최초 1회만 로드됨)

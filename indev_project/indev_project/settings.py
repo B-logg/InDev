@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '43.203.54.36',
     'indev-project.p-e.kr',
     '127.0.0.1',
+    "localhost",
 ]
 
 
@@ -104,6 +105,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://indev-project.p-e.kr",
     "http://localhost:8080",
     "http://127.0.0.1:8000",
+    "http://localhost:5173",
 ]
 
 

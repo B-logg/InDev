@@ -11,7 +11,7 @@ class Store(models.Model):
     category = models.ForeignKey('category.Category', on_delete=models.SET_NULL, 
         null=True, db_column="Category_id")
 
-    owner = models.ForeignKey('owner.Owner', on_delete=models.CASCADE, db_column="owner_id", default=1)
+    #owner = models.ForeignKey('owner.Owner', on_delete=models.CASCADE, db_column="owner_id", default=1)
 
     def __str__(self):
         return self.name

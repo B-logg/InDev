@@ -37,6 +37,7 @@ transformers==4.55.0
 typing_extensions==4.14.1
 urllib3==2.5.0
 zipp==3.23.0
+gunicorn
 
 
 # 전단지 생성 모델을 사용하기 위해 필요한 PyTorch는 운영체제 별로 설치 방법이 달라 따로 뺄게요.

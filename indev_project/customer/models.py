@@ -3,15 +3,20 @@ from django.db import models
 
 # Create your models here.
 class Customer(models.Model):
+
+    GENDER_CHOICES = [
+        ('M', '남성'),
+        ('F', '여성'), 
+    ]
+
     customer_id = models.AutoField(primary_key=True)
     nickname = models.CharField(max_length=50)
     intro = models.TextField(blank=True, null=True)
     reward = models.IntegerField(default=0)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-    # character = models.ForeignKey('Character', on_delete=models.SET_NULL, null=True, blank=True, related_name='customers')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    character = models.ForeignKey('Character', on_delete=models.SET_NULL, null=True, blank=True, related_name='customers')
     
     def __str__(self):
         return self.nickname

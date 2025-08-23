@@ -24,7 +24,6 @@ class Customer(models.Model):
 class Character(models.Model):
     character_id = models.AutoField(primary_key=True)  # PK
     name = models.CharField(max_length=100)  # 캐릭터 이름
-    image = models.ImageField(upload_to='character/', blank=True, null=True)  # 캐릭터 이미지
-
+    
     def __str__(self):
         return self.name

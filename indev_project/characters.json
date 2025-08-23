@@ -1,0 +1,30 @@
+[
+{
+  "model": "customer.character",
+  "pk": 1,
+  "fields": {
+    "name": "도깨비"
+  }
+},
+{
+  "model": "customer.character",
+  "pk": 2,
+  "fields": {
+    "name": "여자"
+  }
+},
+{
+  "model": "customer.character",
+  "pk": 3,
+  "fields": {
+    "name": "남자"
+  }
+},
+{
+  "model": "customer.character",
+  "pk": 4,
+  "fields": {
+    "name": "고양이"
+  }
+}
+]

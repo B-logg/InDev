@@ -46,7 +46,7 @@ class CharacterView(APIView):
             character = get_object_or_404(Character, pk=pk)
             serializer = CharacterSerializer(character)
             return Response(serializer.data)
-        characters = Character.objects.all().values("character_id", "name", "image")
+        characters = Character.objects.all().values("character_id", "name")
         return Response(list(characters))
 
     def post(self, request):

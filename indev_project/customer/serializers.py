@@ -11,4 +11,4 @@ class CustomerSerializer(serializers.ModelSerializer):
 class CharacterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Character
-        fields = ['character_id', 'name', 'image']
+        fields = '__all__'

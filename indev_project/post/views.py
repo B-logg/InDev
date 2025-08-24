@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import PostMassil
 from .serializers import PostMassilSerializer
+from customer.models import Customer
 
 # CRUD
 class PostMassilView(APIView):
@@ -19,9 +20,11 @@ class PostMassilView(APIView):
     
     # 생성
     def post(self, request):
+        customer_id = request.data.get("customer_id")
+        customer = get_object_or_404(Customer, pk=customer_id)
         serializer = PostMassilSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=customer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

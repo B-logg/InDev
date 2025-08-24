@@ -6,8 +6,10 @@ class PostMassil(models.Model):
     post_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     content = models.TextField()
+    neighborhood = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    image = image = models.ImageField(upload_to="post_images/", null=True, blank=True)
 
     routine = models.OneToOneField(Routine, on_delete=models.SET_NULL, null=True, blank=True)
     

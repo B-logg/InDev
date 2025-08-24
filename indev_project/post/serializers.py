@@ -8,7 +8,7 @@ class PostMassilSerializer(serializers.ModelSerializer):
     routine = RoutineSerializer(read_only=True)
     customer_id = serializers.PrimaryKeyRelatedField(source="customer", queryset=Customer.objects.all() ,write_only=True)
     customer_name = serializers.CharField(source="customer.nickname", read_only=True)
-    customer_character = serializers.Field(source="customer.character.character_id", read_only=True)
+    customer_character = serializers.IntegerField(source="customer.character.character_id", read_only=True)
 
     class Meta:
         model = PostMassil

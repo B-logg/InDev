@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     
     # Basic App
     "rest_framework",
-    'flyers',
     'corsheaders',
     "django.contrib.admin",
     "django.contrib.auth",

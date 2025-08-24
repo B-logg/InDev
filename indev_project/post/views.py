@@ -24,7 +24,7 @@ class PostMassilView(APIView):
         customer = get_object_or_404(Customer, pk=customer_id)
         serializer = PostMassilSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=customer)
+            serializer.save(customer=customer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

@@ -11,7 +11,7 @@ class PostMassil(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = image = models.ImageField(upload_to="post_images/", null=True, blank=True)
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="posts", null=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="posts", null=True, blank=True)
     routine = models.OneToOneField(Routine, on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):

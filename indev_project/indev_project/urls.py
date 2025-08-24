@@ -13,5 +13,4 @@ urlpatterns = [
     path("owner/",include("owner.urls")),
     path("category/",include("category.urls")),
     path("store/",include("store.urls")),
-    path('flyers/', include("flyers.urls")), # 전단지 관련
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,30 @@
+[
+{
+  "model": "category.category",
+  "pk": 1,
+  "fields": {
+    "name": "식당"
+  }
+},
+{
+  "model": "category.category",
+  "pk": 2,
+  "fields": {
+    "name": "카페"
+  }
+},
+{
+  "model": "category.category",
+  "pk": 3,
+  "fields": {
+    "name": "서점"
+  }
+},
+{
+  "model": "category.category",
+  "pk": 4,
+  "fields": {
+    "name": "소품샵"
+  }
+}
+]

@@ -13,7 +13,7 @@ class PostMassilView(APIView):
             post = get_object_or_404(PostMassil, pk=pk)
             serializer = PostMassilSerializer(post)
         else:
-            posts = PostMassil.objects.all()
+            posts = PostMassil.objects.all().order_by("-created_at")
             serializer = PostMassilSerializer(posts, many=True)
         return Response(serializer.data)
     

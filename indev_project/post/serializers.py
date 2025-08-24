@@ -10,4 +10,4 @@ class PostMassilSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostMassil
-        fields = '__all__'
+        exclude = ["user"]

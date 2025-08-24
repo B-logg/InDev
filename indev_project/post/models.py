@@ -15,4 +15,4 @@ class PostMassil(models.Model):
     routine = models.OneToOneField(Routine, on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
-        return f"Post #{self.title} by {self.user.nickname if self.user else 'Unknown'}"
+        return f"Post #{self.title} by {self.customer.nickname if self.customer else 'Unknown'}"

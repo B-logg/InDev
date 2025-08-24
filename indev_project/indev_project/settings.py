@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "store",
     "missions",
     "route",
+    # "flyers",
     
     # Basic App
     "rest_framework",

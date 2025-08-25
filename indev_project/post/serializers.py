@@ -19,7 +19,7 @@ class PostMassilSerializer(serializers.ModelSerializer):
         source="store", queryset=Store.objects.all(),
         write_only=True, required=False
     )
-    store_name = serializers.CharField(source="store.store_name", read_only=True)
+    store_name = serializers.CharField(source="store.name", read_only=True)
 
 
 

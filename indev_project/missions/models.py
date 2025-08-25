@@ -19,7 +19,8 @@ class OwnerMission(models.Model):
 # === 하루 배정 기록 ===
 class CustomerDailyMission(models.Model):
     class Status(models.TextChoices):
-        ASSIGNED = "ASSIGNED", "배정됨"
+        ASSIGNED = "ASSIGNED", "배정됨" 
+        ING = "ING", "진행중"
         COMPLETED = "COMPLETED", "완료"
         INVALIDATED = "INVALIDATED", "무효(다른 미션 완료됨)"
         EXPIRED = "EXPIRED", "만료(다음날)"

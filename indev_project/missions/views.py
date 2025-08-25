@@ -197,6 +197,7 @@ class CompleteMissionView(APIView):
                 .filter(customer=customer, assign_date=today, status__in=[S.ASSIGNED, S.ING])
                 .exclude(pk=entry.pk)
                 .update(status=S.INVALIDATED))
+            OwnerMission.objects.filter(pk=owner_mission.pk).update(is_active=True)
 
             today_qs = CustomerDailyMission.objects.filter(customer=customer, assign_date=today)
 

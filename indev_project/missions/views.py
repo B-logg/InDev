@@ -14,7 +14,7 @@ from .serializers import (
 )
 
 ASSIGN_COUNT = 3
-S = CustomerDailyMission.Status  # 상태 alias
+S = CustomerDailyMission.Status
 
 # OwnerMission CRUD 그대로 유지
 class OwnerMissionListCreateView(generics.ListCreateAPIView):
@@ -78,11 +78,17 @@ class AssignMissionsView(APIView):
         return Response({"date": str(today), "count": len(data), "missions": data}, status=status.HTTP_200_OK)
 
 
+# mission/views.py
+
+S = CustomerDailyMission.Status
+
 class StartMissionView(APIView):
     """
     POST /mission/assign/<pk>/start/<mission_id>/
     - 오늘 배정된 미션을 'ING(진행중)'으로 표시
     - 같은 날 다른 'ING'는 'ASSIGNED'로 되돌려 하루에 하나만 진행중 유지
+    - ING 로 바뀐 미션의 OwnerMission.is_active = False
+    - 🔹 (추가) 기존 ING -> ASSIGNED 로 되돌아간 미션들의 OwnerMission.is_active = True
     """
     def post(self, request, pk, mission_id):
         try:
@@ -101,20 +107,37 @@ class StartMissionView(APIView):
                 return Response({"detail": "오늘 배정된 해당 미션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
             if entry.status == S.ASSIGNED:
-                # 하루에 하나만 ING 허용: 다른 ING → ASSIGNED
+                # ⬇️ 기존에 진행중이던 것(있다면) 수집
+                prev_ing_entries = list(
+                    qs_today.filter(status=S.ING).exclude(pk=entry.pk).only("owner_mission_id")
+                )
+
+                # 기존 ING → ASSIGNED
                 qs_today.filter(status=S.ING).exclude(pk=entry.pk).update(status=S.ASSIGNED)
+
+                # ⬇️ 기존 ING 였던 미션들 다시 활성화
+                if prev_ing_entries:
+                    OwnerMission.objects.filter(
+                        pk__in=[e.owner_mission_id for e in prev_ing_entries]
+                    ).update(is_active=True)
+
+                # 이번 것을 진행중으로 + 비활성화
                 entry.status = S.ING
                 entry.save(update_fields=["status"])
+                OwnerMission.objects.filter(pk=entry.owner_mission_id).update(is_active=False)
+
             elif entry.status == S.ING:
-                # 멱등성 보장: 이미 진행중이면 OK
-                pass
+                # 멱등성: 이미 진행중이면 상태 유지, 비활성화만 보정
+                OwnerMission.objects.filter(pk=entry.owner_mission_id).update(is_active=False)
+
             else:
-                return Response({"detail": f"현재 상태가 '{entry.status}'라 시작할 수 없습니다."},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"detail": f"현재 상태가 '{entry.status}'라 시작할 수 없습니다."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             data = CustomerDailyMissionSerializer(qs_today, many=True).data
             return Response({"date": str(today), "missions": data}, status=status.HTTP_200_OK)
-
 
 class CompleteMissionView(APIView):
     """

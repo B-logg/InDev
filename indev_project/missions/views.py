@@ -38,6 +38,7 @@ class AssignMissionsView(APIView):
     GET /mission/assign/<pk>/
     - 오늘자 배정이 없으면: 어제까지 ASSIGNED/ING → EXPIRED, 랜덤 3개 ASSIGNED 생성
     - 이미 오늘자 배정이 있으면 그대로 반환
+    - 🔹 배정된 OwnerMission.customer 를 해당 고객으로 설정
     """
     def get(self, request, pk):
         try:
@@ -47,7 +48,7 @@ class AssignMissionsView(APIView):
 
         today = timezone.localdate()
         with transaction.atomic():
-            # ✅ 어제까지 'ASSIGNED'와 'ING' 모두 만료 처리
+            # 어제까지 ASSIGNED/ING → EXPIRED
             (CustomerDailyMission.objects
                 .select_for_update()
                 .filter(customer=customer, assign_date__lt=today, status__in=[S.ASSIGNED, S.ING])
@@ -58,10 +59,14 @@ class AssignMissionsView(APIView):
             )
 
             if today_qs.count() == 0:
-                available = (OwnerMission.objects
-                             .filter(is_active=True)
-                             .order_by(Random())[:ASSIGN_COUNT])
+                # 🔹 아직 고객에게 귀속되지 않은(isnull) 활성 미션 중에서만 랜덤 3개
+                available_qs = (OwnerMission.objects
+                                .select_for_update()              # DB가 지원하면 잠금
+                                .filter(is_active=True, customer__isnull=True)
+                                .order_by(Random())[:ASSIGN_COUNT])
+                available = list(available_qs)
 
+                # 오늘 배정 레코드 생성
                 to_create = [
                     CustomerDailyMission(
                         customer=customer,
@@ -72,12 +77,26 @@ class AssignMissionsView(APIView):
                     for om in available
                 ]
                 CustomerDailyMission.objects.bulk_create(to_create)
+
+                # 🔹 방금 배정한 OwnerMission 들의 customer 채우기
+                if available:
+                    OwnerMission.objects.filter(
+                        pk__in=[om.pk for om in available]
+                    ).update(customer=customer)
+
                 today_qs = CustomerDailyMission.objects.filter(customer=customer, assign_date=today)
+
+            else:
+                # 🔹 이미 오늘 배정된 항목이 있는데 owner_mission.customer 가 비어 있으면 채워주기(보정)
+                null_owner_ids = list(
+                    today_qs.filter(owner_mission__customer__isnull=True)
+                            .values_list("owner_mission_id", flat=True)
+                )
+                if null_owner_ids:
+                    OwnerMission.objects.filter(pk__in=null_owner_ids).update(customer=customer)
 
         data = CustomerDailyMissionSerializer(today_qs, many=True).data
         return Response({"date": str(today), "count": len(data), "missions": data}, status=status.HTTP_200_OK)
-
-
 # mission/views.py
 
 S = CustomerDailyMission.Status

@@ -8,6 +8,7 @@ class OwnerMissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = OwnerMission
         fields = ["id", "store", "store_name", "content", "is_active", "customer", "created_at", "title", "reward"]
+
 class OwnerMissionSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = OwnerMission

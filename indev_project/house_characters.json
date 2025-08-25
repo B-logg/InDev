@@ -1,0 +1,30 @@
+[
+{
+  "model": "customer.character",
+  "pk": 1,
+  "fields": {
+    "name": "주막"
+  }
+},
+{
+  "model": "customer.character",
+  "pk": 2,
+  "fields": {
+    "name": "기와집"
+  }
+},
+{
+  "model": "customer.character",
+  "pk": 3,
+  "fields": {
+    "name": "시장"
+  }
+},
+{
+  "model": "customer.character",
+  "pk": 4,
+  "fields": {
+    "name": "책방"
+  }
+}
+]

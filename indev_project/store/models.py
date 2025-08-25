@@ -1,5 +1,6 @@
 # store/models.py
 from django.db import models
+from customer.models import Character
 
 class Store(models.Model):
     store_id = models.AutoField(primary_key=True)  # PK
@@ -11,7 +12,8 @@ class Store(models.Model):
     category = models.ForeignKey('category.Category', on_delete=models.SET_NULL, 
         null=True, db_column="Category_id")
 
-    #owner = models.ForeignKey('owner.Owner', on_delete=models.CASCADE, db_column="owner_id", default=1)
+    character = models.ForeignKey(Character, on_delete=models.SET_NULL, null=True, blank=True, related_name='stores')
+
 
     def __str__(self):
         return self.name

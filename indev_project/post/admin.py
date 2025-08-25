@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-# from .models import 
-
 # Register your models here.
-# admin.site.register() 
+from .models import PostMassil
+admin.site.register(PostMassil)

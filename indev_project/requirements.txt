@@ -40,9 +40,3 @@ zipp==3.23.0
 gunicorn
 
 
-# 전단지 생성 모델을 사용하기 위해 필요한 PyTorch는 운영체제 별로 설치 방법이 달라 따로 뺄게요.
-# (MacOS) python3 -m pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0
-# (Windows + NVDIA GPU) python -m pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \ --index-url https://download.pytorch.org/whl/cu121
-# (Windows + CPU) python -m pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \ --index-url https://download.pytorch.org/whl/cpu
-# 혹시나 로컬환경이 윈도우이고, GPU가 탑재되어있다하면, 두번째 방법
-# 로컬환경이 윈도우이고, GPU 없다하면, 세번째 방법입니다. (노트북은 왠만하면 세번째 방법)

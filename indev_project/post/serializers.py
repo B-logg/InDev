@@ -20,7 +20,7 @@ class PostMassilSerializer(serializers.ModelSerializer):
         write_only=True, required=False
     )
     store_name = serializers.CharField(source="store.name", read_only=True)
-
+    store_character = serializers.IntegerField(source="store.character.character_id", read_only=True)
 
 
     class Meta:

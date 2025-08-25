@@ -19,5 +19,5 @@ urlpatterns = [
     path("assign/<int:pk>/start/<int:mission_id>/", StartMissionView.as_view(), name="start-mission"),
 
     # 미션 완료 (오늘 배정된 특정 미션 완료)
-    path("assign/<int:pk>/complete/<int:mission_id>/", CompleteMissionView.as_view(), name="complete-mission"),
+    path("assign/complete/<int:mission_id>/", CompleteMissionView.as_view(), name="complete-mission"),
 ]

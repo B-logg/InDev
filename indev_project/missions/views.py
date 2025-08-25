@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 from customer.models import Customer
 from .models import OwnerMission, CustomerDailyMission
@@ -158,39 +159,48 @@ class StartMissionView(APIView):
             data = CustomerDailyMissionSerializer(qs_today, many=True).data
             return Response({"date": str(today), "missions": data}, status=status.HTTP_200_OK)
 
+
 class CompleteMissionView(APIView):
     """
-    POST /mission/assign/<pk>/complete/<mission_id>/
-    - 오늘 배정된 해당 미션을 'COMPLETED'
-    - 같은 날의 나머지 'ASSIGNED'와 'ING'는 모두 'INVALIDATED'
+    POST /mission/assign/complete/<mission_id>/
+    - OwnerMission.customer 를 이용해 고객 식별
+    - 오늘 배정된 해당 미션 완료 처리
     """
-    def post(self, request, pk, mission_id):
-        try:
-            customer = Customer.objects.get(pk=pk)
-        except Customer.DoesNotExist:
-            return Response({"detail": "해당 고객이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+    def post(self, request, mission_id):
+        owner_mission = get_object_or_404(OwnerMission, pk=mission_id)
+        customer = owner_mission.customer
+        if customer is None:
+            return Response({"detail": "이 미션은 아직 어떤 고객에게도 배정되지 않았습니다."},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         today = timezone.localdate()
-        with transaction.atomic():
-            qs_today = CustomerDailyMission.objects.select_for_update().filter(
-                customer=customer, assign_date=today
-            )
-            try:
-                entry = qs_today.get(owner_mission_id=mission_id)
-            except CustomerDailyMission.DoesNotExist:
-                return Response({"detail": "오늘 배정된 해당 미션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
-            # ✅ ASSIGNED 또는 ING만 완료 허용
+        with transaction.atomic():
+            try:
+                entry = CustomerDailyMission.objects.select_for_update().get(
+                    customer=customer,
+                    assign_date=today,
+                    owner_mission_id=mission_id
+                )
+            except CustomerDailyMission.DoesNotExist:
+                return Response({"detail": "오늘 배정된 해당 미션이 없습니다."},
+                                status=status.HTTP_404_NOT_FOUND)
+
+            # ASSIGNED/ING만 완료 허용
             if entry.status not in [S.ASSIGNED, S.ING]:
                 return Response({"detail": f"현재 상태가 '{entry.status}'라 완료 처리 불가합니다."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             entry.status = S.COMPLETED
             entry.save(update_fields=["status"])
+            (CustomerDailyMission.objects
+                .filter(customer=customer, assign_date=today, status__in=[S.ASSIGNED, S.ING])
+                .exclude(pk=entry.pk)
+                .update(status=S.INVALIDATED))
 
-            # ✅ 남은 ASSIGNED/ING는 전부 무효
-            qs_today.exclude(pk=entry.pk).filter(status__in=[S.ASSIGNED, S.ING]).update(status=S.INVALIDATED)
+            today_qs = CustomerDailyMission.objects.filter(customer=customer, assign_date=today)
 
-            data = CustomerDailyMissionSerializer(qs_today, many=True).data
-            return Response({"date": str(today), "missions": data}, status=status.HTTP_200_OK)
-
+        return Response({
+            "date": str(today),
+            "missions": CustomerDailyMissionSerializer(today_qs, many=True).data
+        }, status=status.HTTP_200_OK)

@@ -12,7 +12,7 @@ class OwnerMissionSerializer(serializers.ModelSerializer):
 class OwnerMissionSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = OwnerMission
-        fields = ["id", "title", "content", "reward", "is_active","customer"]
+        fields = ["id", "title", "content", "reward", "is_active"]
 
 class CustomerDailyMissionSerializer(serializers.ModelSerializer):
     owner_mission = OwnerMissionSimpleSerializer()

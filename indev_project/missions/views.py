@@ -25,6 +25,13 @@ class OwnerMissionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OwnerMissionSerializer
 
 
+
+class OwnerMissionByStoreListView(generics.ListAPIView):
+    serializer_class = OwnerMissionSerializer
+    def get_queryset(self):
+        store_id = self.kwargs.get("store_id")
+        return OwnerMission.objects.filter(store_id=store_id).order_by("-created_at")
+
 class AssignMissionsView(APIView):
     """
     GET /mission/customer/<pk>/

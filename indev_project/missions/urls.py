@@ -2,13 +2,17 @@
 from django.urls import path
 from .views import (
     OwnerMissionListCreateView, OwnerMissionDetailView,
-    AssignMissionsView, CompleteMissionView
+    AssignMissionsView, CompleteMissionView,OwnerMissionByStoreListView
 )
 
 urlpatterns = [
     # OwnerMission CRUD
     path("owner-missions/", OwnerMissionListCreateView.as_view(), name="owner-mission-list-create"),
     path("owner-missions/<int:pk>/", OwnerMissionDetailView.as_view(), name="owner-mission-detail"),
+
+    # ✅ 특정 가게의 미션 목록
+    path("owner-missions/store/<int:store_id>/", OwnerMissionByStoreListView.as_view(),
+         name="owner-mission-by-store"),
 
     # 미션 배정(오늘자 조회/필요 시 생성)
     path("assign/<int:pk>/", AssignMissionsView.as_view(), name="assign-missions"),
